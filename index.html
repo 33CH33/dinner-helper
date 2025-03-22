@@ -183,11 +183,9 @@
         return;
       }
 
-      slotTimer = setInterval(() => {() => {
-        let dish;
+      slotTimer = setInterval(() => {
         const random = validOptions[Math.floor(Math.random() * validOptions.length)];
         document.getElementById("slot-box").textContent = random;
-        document.getElementById("slot-box").textContent = dish;
       }, 80);
       document.getElementById("slot-result").innerHTML = "";
     }
