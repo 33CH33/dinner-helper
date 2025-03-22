@@ -167,19 +167,27 @@
   "炒泡麵", "鍋貼", "蒸餃", "小籠包", "豆漿油條", "杏仁豆腐", "涼粉", "香辣牛肚", "鴨血臭豆腐", "豆皮壽司",
   "泡菜起司鍋", "培根蛋堡", "肉燥飯", "鹹水雞", "粽子", "客家小炒", "螞蟻上樹", "炒高麗菜", "荷包蛋", "叉燒飯"
 ];
-    function startSlot() {
-      if (isSpinning) return;
-      isSpinning = true;
-      const blacklist = filters();
-      slotTimer = setInterval(() => {
-        let dish;
-        do {
-          dish = slotDishes[Math.floor(Math.random() * slotDishes.length)];
-        } while (blacklist.some(b => dish.includes(b)));
-        document.getElementById("slot-box").textContent = dish;
-      }, 80);
-      document.getElementById("slot-result").innerHTML = "";
-    }
+function startSlot() {
+  if (isSpinning) return;
+  isSpinning = true;
+  const blacklist = filters();
+  const validOptions = slotDishes.filter(dish => !blacklist.some(b => dish.includes(b)));
+
+  if (validOptions.length === 0) {
+    document.getElementById("slot-box").textContent = "😵 沒有可選項目";
+    document.getElementById("slot-result").innerHTML = "請取消一些『不想吃的』再試試～";
+    isSpinning = false;
+    return;
+  }
+
+  slotTimer = setInterval(() => {
+    const random = validOptions[Math.floor(Math.random() * validOptions.length)];
+    document.getElementById("slot-box").textContent = random;
+  }, 80);
+
+  document.getElementById("slot-result").innerHTML = "";
+}
+
 
     function stopSlot() {
       if (!isSpinning) return;
