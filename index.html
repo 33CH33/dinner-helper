@@ -132,74 +132,75 @@
 
   <audio id="ding" src="https://freesound.org/data/previews/341/341695_3248244-lq.mp3"></audio>
 
-  <script>
-    const filters = () => Array.from(document.querySelectorAll('#filters input:checked')).map(cb => cb.value);
+  <script defer>
+  const filters = () => Array.from(document.querySelectorAll('#filters input:checked')).map(cb => cb.value);
 
-    const categoryData = {
-      "中餐": ["宮保雞丁", "紅燒牛肉麵", "三杯雞", "滷肉飯", "炒米粉"],
-      "西餐": ["牛排", "焗烤馬鈴薯", "義大利麵", "奶油燉飯", "起司漢堡"],
-      "日式": ["拉麵", "壽司", "咖哩飯", "炸豬排", "親子丼"],
-      "韓式": ["石鍋拌飯", "韓式炸雞", "部隊鍋", "泡菜炒飯", "辣炒年糕"],
-      "泰式": ["打拋豬", "綠咖哩", "月亮蝦餅", "泰式酸辣湯", "椰汁雞肉飯"],
-      "甜點": ["珍珠奶茶", "抹茶蛋糕", "芋泥球", "冰淇淋鬆餅", "千層蛋糕"],
-      "小吃": ["鹽酥雞", "蚵仔煎", "大腸麵線", "米血", "臭豆腐"],
-      "速食": ["麥當勞", "肯德基", "漢堡王", "摩斯漢堡", "頂呱呱"]
-    };
+  const categoryData = {
+    "中餐": ["宮保雞丁", "紅燒牛肉麵", "三杯雞", "滷肉飯", "炒米粉"],
+    "西餐": ["牛排", "焗烤馬鈴薯", "義大利麵", "奶油燉飯", "起司漢堡"],
+    "日式": ["拉麵", "壽司", "咖哩飯", "炸豬排", "親子丼"],
+    "韓式": ["石鍋拌飯", "韓式炸雞", "部隊鍋", "泡菜炒飯", "辣炒年糕"],
+    "泰式": ["打拋豬", "綠咖哩", "月亮蝦餅", "泰式酸辣湯", "椰汁雞肉飯"],
+    "甜點": ["珍珠奶茶", "抹茶蛋糕", "芋泥球", "冰淇淋鬆餅", "千層蛋糕"],
+    "小吃": ["鹽酥雞", "蚵仔煎", "大腸麵線", "米血", "臭豆腐"],
+    "速食": ["麥當勞", "肯德基", "漢堡王", "摩斯漢堡", "頂呱呱"]
+  };
 
-    function recommendByCategory() {
-      const cuisine = document.getElementById("cuisine").value;
-      const blacklist = filters();
-      const options = categoryData[cuisine] || [];
-      const filtered = options.filter(item => !blacklist.some(b => item.includes(b)));
-      const chosen = filtered[Math.floor(Math.random() * filtered.length)];
-      document.getElementById("category-result").innerHTML = chosen ? `推薦你吃：<strong>${chosen}</strong><br><a class="link" href="https://www.google.com/search?q=${encodeURIComponent(chosen + ' 附近')}" target="_blank">搜尋附近的「${chosen}」</a>` : "找不到符合的餐點，請重新選擇。";
-    }
+  function recommendByCategory() {
+    const cuisine = document.getElementById("cuisine").value;
+    const blacklist = filters();
+    const options = categoryData[cuisine] || [];
+    const filtered = options.filter(item => !blacklist.some(b => item.includes(b)));
+    const chosen = filtered[Math.floor(Math.random() * filtered.length)];
+    document.getElementById("category-result").innerHTML = chosen ? `推薦你吃：<strong>${chosen}</strong><br><a class="link" href="https://www.google.com/search?q=${encodeURIComponent(chosen + ' 附近')}" target="_blank">搜尋附近的「${chosen}」</a>` : "找不到符合的餐點，請重新選擇。";
+  }
 
-    const slotDishes = [
-  "牛排", "義大利麵", "拉麵", "壽司", "紅燒牛肉麵", "三杯雞", "韓式炸雞", "泡菜鍋", "月亮蝦餅", "咖哩飯",
-  "石鍋拌飯", "親子丼", "炒米粉", "奶油燉飯", "焗烤馬鈴薯", "起司漢堡", "炸豬排", "部隊鍋", "抹茶蛋糕", "芋泥球",
-  "千層蛋糕", "珍珠奶茶", "鹽酥雞", "臭豆腐", "大腸麵線", "米血", "摩斯漢堡", "肯德基", "麥當勞", "漢堡王",
-  "頂呱呱", "芒果冰", "涼麵", "涼拌海帶絲", "泰式酸辣湯", "綠咖哩", "椰汁雞肉飯", "蚵仔煎", "鍋燒意麵", "擔仔麵",
-  "韓式冷麵", "明太子炒飯", "炸雞塊", "起司焗飯", "鮭魚丼", "章魚燒", "豆花", "紅豆餅", "車輪餅", "烤地瓜",
-  "牛肉捲餅", "蔥抓餅", "雞肉飯", "鵝肉飯", "雞腿便當", "鯖魚定食", "和風牛肉鍋", "涼拌豆腐", "法式吐司", "起司三明治",
-  "鮮蝦餛飩湯", "滷味拼盤", "烏龍麵", "貢丸湯", "炒飯", "炒麵", "燒肉丼", "薯條", "熱狗堡", "可麗餅",
-  "鮪魚三明治", "日式關東煮", "麻辣燙", "刈包", "麻婆豆腐", "紅燒魚", "糖醋里肌", "椒鹽雞塊", "酸菜白肉鍋", "韓式豆腐煲",
-  "炒泡麵", "鍋貼", "蒸餃", "小籠包", "豆漿油條", "杏仁豆腐", "涼粉", "香辣牛肚", "鴨血臭豆腐", "豆皮壽司",
-  "泡菜起司鍋", "培根蛋堡", "肉燥飯", "鹹水雞", "粽子", "客家小炒", "螞蟻上樹", "炒高麗菜", "荷包蛋", "叉燒飯"
-];
-    let slotTimer;
-let currentSlotResult = "";
-    let isSpinning = false;
+  const slotDishes = [
+    "牛排", "義大利麵", "拉麵", "壽司", "紅燒牛肉麵", "三杯雞", "韓式炸雞", "泡菜鍋", "月亮蝦餅", "咖哩飯",
+    "石鍋拌飯", "親子丼", "炒米粉", "奶油燉飯", "焗烤馬鈴薯", "起司漢堡", "炸豬排", "部隊鍋", "抹茶蛋糕", "芋泥球",
+    "千層蛋糕", "珍珠奶茶", "鹽酥雞", "臭豆腐", "大腸麵線", "米血", "摩斯漢堡", "肯德基", "麥當勞", "漢堡王",
+    "頂呱呱", "芒果冰", "涼麵", "涼拌海帶絲", "泰式酸辣湯", "綠咖哩", "椰汁雞肉飯", "蚵仔煎", "鍋燒意麵", "擔仔麵",
+    "韓式冷麵", "明太子炒飯", "炸雞塊", "起司焗飯", "鮭魚丼", "章魚燒", "豆花", "紅豆餅", "車輪餅", "烤地瓜",
+    "牛肉捲餅", "蔥抓餅", "雞肉飯", "鵝肉飯", "雞腿便當", "鯖魚定食", "和風牛肉鍋", "涼拌豆腐", "法式吐司", "起司三明治",
+    "鮮蝦餛飩湯", "滷味拼盤", "烏龍麵", "貢丸湯", "炒飯", "炒麵", "燒肉丼", "薯條", "熱狗堡", "可麗餅",
+    "鮪魚三明治", "日式關東煮", "麻辣燙", "刈包", "麻婆豆腐", "紅燒魚", "糖醋里肌", "椒鹽雞塊", "酸菜白肉鍋", "韓式豆腐煲",
+    "炒泡麵", "鍋貼", "蒸餃", "小籠包", "豆漿油條", "杏仁豆腐", "涼粉", "香辣牛肚", "鴨血臭豆腐", "豆皮壽司",
+    "泡菜起司鍋", "培根蛋堡", "肉燥飯", "鹹水雞", "粽子", "客家小炒", "螞蟻上樹", "炒高麗菜", "荷包蛋", "叉燒飯"
+  ];
 
-    function startSlot() {
-      if (isSpinning) return;
-      isSpinning = true;
-      const blacklist = filters();
-      const validOptions = slotDishes.filter(dish => !blacklist.some(b => dish.includes(b)));
+  let slotTimer;
+  let currentSlotResult = "";
+  let isSpinning = false;
 
-      if (validOptions.length === 0) {
-        document.getElementById("slot-box").textContent = "😵 沒有可選項目";
-        document.getElementById("slot-result").innerHTML = "請取消一些『不想吃的』再試試～";
-        isSpinning = false;
-        return;
-      }
+  function startSlot() {
+    if (isSpinning) return;
+    isSpinning = true;
+    const blacklist = filters();
+    const validOptions = slotDishes.filter(dish => !blacklist.some(b => dish.includes(b)));
 
-      slotTimer = setInterval(() => {
-        const random = validOptions[Math.floor(Math.random() * validOptions.length)];
-        document.getElementById("slot-box").textContent = random;
-        currentSlotResult = random;
-      }, 80);
-      document.getElementById("slot-result").innerHTML = "";
-    }
-
-    function stopSlot() {
-      if (!isSpinning) return;
-      clearInterval(slotTimer);
-      const chosen = currentSlotResult;
-      document.getElementById("ding").play();
-      document.getElementById("slot-result").innerHTML = `你抽中了：<strong>${chosen}</strong><br><a class="link" href="https://www.google.com/search?q=${encodeURIComponent(chosen + ' 附近')}" target="_blank">搜尋附近的「${chosen}」</a>`;
+    if (validOptions.length === 0) {
+      document.getElementById("slot-box").textContent = "😵 沒有可選項目";
+      document.getElementById("slot-result").innerHTML = "請取消一些『不想吃的』再試試～";
       isSpinning = false;
+      return;
     }
-  </script>
+
+    slotTimer = setInterval(() => {
+      const random = validOptions[Math.floor(Math.random() * validOptions.length)];
+      document.getElementById("slot-box").textContent = random;
+      currentSlotResult = random;
+    }, 80);
+    document.getElementById("slot-result").innerHTML = "";
+  }
+
+  function stopSlot() {
+    if (!isSpinning) return;
+    clearInterval(slotTimer);
+    const chosen = currentSlotResult;
+    document.getElementById("ding").play();
+    document.getElementById("slot-result").innerHTML = `你抽中了：<strong>${chosen}</strong><br><a class="link" href="https://www.google.com/search?q=${encodeURIComponent(chosen + ' 附近')}" target="_blank">搜尋附近的「${chosen}」</a>`;
+    isSpinning = false;
+  }
+</script>
 </body>
 </html>
