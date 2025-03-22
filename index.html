@@ -168,6 +168,7 @@
   "泡菜起司鍋", "培根蛋堡", "肉燥飯", "鹹水雞", "粽子", "客家小炒", "螞蟻上樹", "炒高麗菜", "荷包蛋", "叉燒飯"
 ];
     let slotTimer;
+let currentSlotResult = "";
     let isSpinning = false;
 
     function startSlot() {
@@ -186,6 +187,7 @@
       slotTimer = setInterval(() => {
         const random = validOptions[Math.floor(Math.random() * validOptions.length)];
         document.getElementById("slot-box").textContent = random;
+        currentSlotResult = random;
       }, 80);
       document.getElementById("slot-result").innerHTML = "";
     }
@@ -193,7 +195,7 @@
     function stopSlot() {
       if (!isSpinning) return;
       clearInterval(slotTimer);
-      const chosen = document.getElementById("slot-box").textContent;
+      const chosen = currentSlotResult;
       document.getElementById("ding").play();
       document.getElementById("slot-result").innerHTML = `你抽中了：<strong>${chosen}</strong><br><a class="link" href="https://www.google.com/search?q=${encodeURIComponent(chosen + ' 附近')}" target="_blank">搜尋附近的「${chosen}」</a>`;
       isSpinning = false;
