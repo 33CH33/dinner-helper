@@ -122,10 +122,10 @@
     </div>
 
     <div class="card">
-      <div class="section-title">🌀 吃角子老虎機推薦</div>
+      <div class="section-title">🎰 吃角子老虎機推薦</div>
       <button onclick="startSlot()">開始轉動</button>
       <button onclick="stopSlot()">停止</button>
-      <div class="slot-box" id="slot-box">🍝🍿🍜</div>
+      <div class="slot-box" id="slot-box">🍱🍜🍟</div>
       <div class="slot-result" id="slot-result"></div>
     </div>
   </div>
@@ -136,11 +136,14 @@
     const filters = () => Array.from(document.querySelectorAll('#filters input:checked')).map(cb => cb.value);
 
     const categoryData = {
-      "中餐": ["宮保雞丁", "紅燒牛肉麵", "湯捲", "糖醇裡肉", "番茄炒蛋"],
-      "西餐": ["牛排", "義大利麵", "油條", "乾煎魚片", "泥燒糖果"],
-      "日式": ["壽司", "拌麵", "煮物", "日式咖尼", "炸豬排"],
-      "韓式": ["韓式炒麵", "韓式雞塊", "部隊鍋", "豬肉糖醬燒", "辣炒年糖"],
-      "泰式": ["..."] // 可再擴充
+      "中餐": ["宮保雞丁", "紅燒牛肉麵", "三杯雞", "滷肉飯", "炒米粉", "酸菜白肉鍋", "蔥爆牛肉", "紅燒排骨", "番茄炒蛋", "豆鼓鯖魚", "蠔油芥藍", "燒酒雞", "牛肉捲餅"],
+      "西餐": ["牛排", "焗烤馬鈴薯", "義大利麵", "奶油燉飯", "起司漢堡", "番茄海鮮義大利麵", "白醬燻雞義大利麵", "法式燉牛肉", "焗烤海鮮飯", "起司培根馬鈴薯", "蘑菇濃湯", "凱薩沙拉", "迷迭香烤雞腿"],
+      "日式": ["拉麵", "壽司", "咖哩飯", "炸豬排", "親子丼", "天婦羅", "味噌湯", "鰻魚飯", "唐揚雞", "章魚燒", "日式燒肉", "豚骨拉麵", "明太子義大利麵"],
+      "韓式": ["石鍋拌飯", "韓式炸雞", "部隊鍋", "泡菜炒飯", "辣炒年糕", "泡菜鍋", "韓式烤肉", "牛肉海帶湯", "人蔘雞湯", "韓式海鮮煎餅", "冷麵", "辣炒魷魚", "起司年糕"],
+      "泰式": ["打拋豬", "綠咖哩", "月亮蝦餅", "泰式酸辣湯", "椰汁雞肉飯", "泰式涼拌木瓜絲", "泰式打拋雞", "泰式河粉", "泰式炒麵", "泰式檸檬魚", "紅咖哩雞", "泰式炸蝦餅", "蝦醬空心菜"],
+      "甜點": ["珍珠奶茶", "抹茶蛋糕", "芋泥球", "冰淇淋鬆餅", "千層蛋糕", "紅豆餅", "巧克力布朗尼", "奶酪", "提拉米蘇", "焦糖布丁", "可麗露", "草莓塔", "乳酪蛋糕"],
+      "小吃": ["鹽酥雞", "蚵仔煎", "大腸麵線", "米血", "臭豆腐", "肉圓", "甜不辣", "炸豆腐", "刈包", "蔥抓餅", "筒仔米糕", "魯肉飯", "關東煮"],
+      "速食": ["麥當勞", "肯德基", "漢堡王", "摩斯漢堡", "頂呱呱", "達美樂", "必勝客", "拿坡里炸雞", "麥味登", "Subway", "Taco Bell", "Five Guys", "Shake Shack"]
     };
 
     function recommendByCategory() {
@@ -152,7 +155,7 @@
       document.getElementById("category-result").innerHTML = chosen ? `推薦你吃：<strong>${chosen}</strong><br><a class="link" href="https://www.google.com/search?q=${encodeURIComponent(chosen + ' 附近')}" target="_blank">搜尋附近的「${chosen}」</a>` : "找不到符合的餐點，請重新選擇。";
     }
 
-    const slotDishes = [...Array(100).keys()].map(i => `第${i + 1}道餐點`); // demo: 100道
+    const slotDishes = [...Array(100).keys()].map(i => `第${i + 1}道餐點`);
     let slotTimer;
     let isSpinning = false;
 
