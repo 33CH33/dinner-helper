@@ -136,24 +136,35 @@
   const filters = () => Array.from(document.querySelectorAll('#filters input:checked')).map(cb => cb.value);
 
   const categoryData = {
-    "中餐": ["宮保雞丁", "紅燒牛肉麵", "三杯雞", "滷肉飯", "炒米粉"],
-    "西餐": ["牛排", "焗烤馬鈴薯", "義大利麵", "奶油燉飯", "起司漢堡"],
-    "日式": ["拉麵", "壽司", "咖哩飯", "炸豬排", "親子丼"],
-    "韓式": ["石鍋拌飯", "韓式炸雞", "部隊鍋", "泡菜炒飯", "辣炒年糕"],
-    "泰式": ["打拋豬", "綠咖哩", "月亮蝦餅", "泰式酸辣湯", "椰汁雞肉飯"],
-    "甜點": ["珍珠奶茶", "抹茶蛋糕", "芋泥球", "冰淇淋鬆餅", "千層蛋糕"],
-    "小吃": ["鹽酥雞", "蚵仔煎", "大腸麵線", "米血", "臭豆腐"],
-    "速食": ["麥當勞", "肯德基", "漢堡王", "摩斯漢堡", "頂呱呱"]
+    "中餐": ["宮保雞丁", "紅燒牛肉麵", "三杯雞", "滷肉飯", "炒米粉", "酸辣湯", "蔥爆牛肉", "椒鹽排骨", "番茄炒蛋", "蒜泥白肉", "麻婆豆腐", "酸菜白肉鍋", "炒空心菜", "牛肉捲餅"],
+    "西餐": ["牛排", "焗烤馬鈴薯", "義大利麵", "奶油燉飯", "起司漢堡", "焗烤海鮮飯", "白酒蛤蜊義大利麵", "煙燻鮭魚沙拉", "法式吐司", "蘑菇濃湯", "凱薩沙拉", "起司焗飯", "培根蛋堡"],
+    "日式": ["拉麵", "壽司", "咖哩飯", "炸豬排", "親子丼", "天婦羅", "鰻魚飯", "明太子炒飯", "豚骨拉麵", "章魚燒", "冷蕎麥麵", "日式炒烏龍", "日式牛丼", "豆皮壽司"],
+    "韓式": ["石鍋拌飯", "韓式炸雞", "部隊鍋", "泡菜炒飯", "辣炒年糕", "韓式烤肉", "冷麵", "人蔘雞湯", "韓式煎餅", "泡菜豆腐鍋", "起司年糕", "辣炒魷魚", "豆腐鍋飯"],
+    "泰式": ["打拋豬", "綠咖哩", "月亮蝦餅", "泰式酸辣湯", "椰汁雞肉飯", "涼拌木瓜絲", "蝦醬空心菜", "泰式河粉", "紅咖哩雞", "檸檬魚", "泰式椒麻雞", "炒泡麵", "泰式炒河粉"],
+    "甜點": ["珍珠奶茶", "抹茶蛋糕", "芋泥球", "冰淇淋鬆餅", "千層蛋糕", "提拉米蘇", "紅豆餅", "奶酪", "草莓塔", "巧克力布朗尼", "焦糖布丁", "豆花", "起司蛋糕", "地瓜球"],
+    "小吃": ["鹽酥雞", "蚵仔煎", "大腸麵線", "米血", "臭豆腐", "肉圓", "甜不辣", "刈包", "蔥抓餅", "筒仔米糕", "炒米粉", "關東煮", "燒餅油條", "鍋貼", "小籠包", "東山鴨頭"],
+    "速食": ["麥當勞", "肯德基", "漢堡王", "摩斯漢堡", "頂呱呱", "必勝客", "達美樂", "拿坡里炸雞", "Subway", "Taco Bell", "Five Guys", "Shake Shack", "熱狗堡", "薯條", "炸雞塊"]
   };
 
-  function recommendByCategory() {
-    const cuisine = document.getElementById("cuisine").value;
-    const blacklist = filters();
-    const options = categoryData[cuisine] || [];
-    const filtered = options.filter(item => !blacklist.some(b => item.includes(b)));
-    const chosen = filtered[Math.floor(Math.random() * filtered.length)];
-    document.getElementById("category-result").innerHTML = chosen ? `推薦你吃：<strong>${chosen}</strong><br><a class="link" href="https://www.google.com/search?q=${encodeURIComponent(chosen + ' 附近')}" target="_blank">搜尋附近的「${chosen}」</a>` : "找不到符合的餐點，請重新選擇。";
-  }
+function recommendByCategory() {
+  const cuisine = document.getElementById("cuisine").value;
+  const blacklist = filters();
+  let options = categoryData[cuisine] || [];
+
+  // 先隨機打亂順序
+  options = options
+    .map(item => ({ item, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ item }) => item);
+
+  const filtered = options.filter(item => !blacklist.some(b => item.includes(b)));
+  const chosen = filtered[0]; // 因為已經打亂，取第一個就行
+
+  document.getElementById("category-result").innerHTML = chosen
+    ? `推薦你吃：<strong>${chosen}</strong><br><a class="link" href="https://www.google.com/search?q=${encodeURIComponent(chosen + ' 附近')}" target="_blank">搜尋附近的「${chosen}」</a>`
+    : "找不到符合的餐點，請重新選擇。";
+}
+
 
   const slotDishes = [
     "牛排", "義大利麵", "拉麵", "壽司", "紅燒牛肉麵", "三杯雞", "韓式炸雞", "泡菜鍋", "月亮蝦餅", "咖哩飯",
@@ -164,7 +175,7 @@
     "牛肉捲餅", "蔥抓餅", "雞肉飯", "鵝肉飯", "雞腿便當", "鯖魚定食", "和風牛肉鍋", "涼拌豆腐", "法式吐司", "起司三明治",
     "鮮蝦餛飩湯", "滷味拼盤", "烏龍麵", "貢丸湯", "炒飯", "炒麵", "燒肉丼", "薯條", "熱狗堡", "可麗餅",
     "鮪魚三明治", "日式關東煮", "麻辣燙", "刈包", "麻婆豆腐", "紅燒魚", "糖醋里肌", "椒鹽雞塊", "酸菜白肉鍋", "韓式豆腐煲",
-    "炒泡麵", "鍋貼", "蒸餃", "小籠包", "豆漿油條", "杏仁豆腐", "涼粉", "香辣牛肚", "鴨血臭豆腐", "豆皮壽司",
+    "炒泡麵", "鍋貼", "蒸餃", "小籠包", "豆漿油條", "地瓜球", "涼粉", "香辣牛肚", "鴨血臭豆腐", "豆皮壽司",
     "泡菜起司鍋", "培根蛋堡", "肉燥飯", "鹹水雞", "粽子", "客家小炒", "螞蟻上樹", "炒高麗菜", "荷包蛋", "叉燒飯"
   ];
 
