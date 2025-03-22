@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>晚餐推薦小幫手 v2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 450px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #4A90E2;
+    }
+    .section-title {
+      background-color: #e0e0e0;
+      padding: 10px;
+      margin-top: 40px;
+      font-size: 20px;
+      text-align: center;
+      border-radius: 10px;
+    }
+    select, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px 0;
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #4A90E2;
+      color: white;
+      cursor: pointer;
+    }
+    .result, .slot-result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+    }
+    a.link {
+      display: block;
+      margin-top: 8px;
+      color: #4A90E2;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .slot-box {
+      height: 40px;
+      overflow: hidden;
+      background-color: #fff;
+      border: 2px dashed #aaa;
+      border-radius: 8px;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 40px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>晚餐推薦小幫手</h1>
+
+  <!-- 類型推薦 -->
+  <div class="section-title">🔍 按類型推薦</div>
+  <p>選擇料理類型：</p>
+  <select id="cuisine">
+    <option value="中餐">中餐</option>
+    <option value="西餐">西餐</option>
+    <option value="日式">日式</option>
+    <option value="韓式">韓式</option>
+    <option value="泰式">泰式</option>
+    <option value="甜點">甜點</option>
+    <option value="小吃">小吃</option>
+    <option value="速食">速食</option>
+  </select>
+  <button onclick="recommendByCategory()">推薦餐點</button>
+  <div class="result" id="category-result"></div>
+
+  <!-- 老虎機 -->
+  <div class="section-title">🎰 吃角子老虎機推薦</div>
+  <button onclick="startSlot()">開始轉動</button>
+  <button onclick="stopSlot()">停止</button>
+  <div class="slot-box" id="slot-box">🍱🍝🍜</div>
+  <div class="slot-result" id="slot-result"></div>
+</div>
+
+<!-- 音效 -->
+<audio id="ding" src="https://freesound.org/data/previews/341/341695_3248244-lq.mp3"></audio>
+
+<script>
+  const categoryData = {
+    "中餐": ["三杯雞", "宮保雞丁", "紅燒牛肉麵", "滷肉飯", "炒米粉"],
+    "西餐": ["牛排", "焗烤馬鈴薯", "義大利麵", "奶油燉飯", "起司漢堡"],
+    "日式": ["拉麵", "壽司", "咖哩飯", "炸豬排", "親子丼"],
+    "韓式": ["石鍋拌飯", "韓式炸雞", "部隊鍋", "泡菜炒飯", "辣炒年糕"],
+    "泰式": ["打拋豬", "綠咖哩", "月亮蝦餅", "泰式酸辣湯", "椰汁雞肉飯"],
+    "甜點": ["珍珠奶茶", "抹茶蛋糕", "芋泥球", "冰淇淋鬆餅", "千層蛋糕"],
+    "小吃": ["鹽酥雞", "蚵仔煎", "大腸麵線", "米血", "臭豆腐"],
+    "速食": ["麥當勞", "肯德基", "漢堡王", "摩斯漢堡", "頂呱呱"]
+  };
+
+  function recommendByCategory() {
+    const cuisine = document.getElementById("cuisine").value;
+    const options = categoryData[cuisine];
+    const random = options[Math.floor(Math.random() * options.length)];
+    const result = `
+      推薦你吃：「<strong>${random}</strong>」<br>
+      <a href="https://www.google.com/search?q=${encodeURIComponent(random + ' 附近')}" class="link" target="_blank">
+        搜尋附近的「${random}」
+      </a>`;
+    document.getElementById("category-result").innerHTML = result;
+  }
+
+  const slotDishes = [
+    // 共 100 道餐點（隨機混合）
+    "牛排","義大利麵","拉麵","壽司","紅燒牛肉麵","三杯雞","韓式炸雞","泡菜鍋","月亮蝦餅","咖哩飯",
+    "石鍋拌飯","親子丼","炒米粉","奶油燉飯","焗烤馬鈴薯","起司漢堡","炸豬排","部隊鍋","抹茶蛋糕","芋泥球",
+    "千層蛋糕","珍珠奶茶","鹽酥雞","臭豆腐","大腸麵線","米血","摩斯漢堡","肯德基","麥當勞","漢堡王",
+    "頂呱呱","芒果冰","涼麵","涼拌海帶絲","泰式酸辣湯","綠咖哩","椰汁雞肉飯","蚵仔煎","鍋燒意麵","擔仔麵",
+    "韓式冷麵","明太子炒飯","炸雞塊","起司焗飯","鮭魚丼","章魚燒","豆花","紅豆餅","車輪餅","烤地瓜",
+    "牛肉捲餅","蔥抓餅","雞肉飯","鵝肉飯","雞腿便當","鯖魚定食","和風牛肉鍋","涼拌豆腐","法式吐司","起司三明治",
+    "鮮蝦餛飩湯","滷味拼盤","烏龍麵","貢丸湯","炒飯","炒麵","燒肉丼","薯條","熱狗堡","可麗餅",
+    "鮪魚三明治","日式關東煮","麻辣燙","刈包","麻婆豆腐","紅燒魚","糖醋里肌","椒鹽雞塊","酸菜白肉鍋","韓式豆腐煲",
+    "炒泡麵","鍋貼","蒸餃","小籠包","豆漿油條","杏仁豆腐","涼粉","香辣牛肚","鴨血臭豆腐","豆皮壽司",
+    "泡菜起司鍋","培根蛋堡","肉燥飯","鹹水雞","粽子","客家小炒","螞蟻上樹","炒高麗菜","荷包蛋","叉燒飯"
+  ];
+
+  let slotTimer;
+  let isSpinning = false;
+
+  function startSlot() {
+    if (isSpinning) return;
+    isSpinning = true;
+    const box = document.getElementById("slot-box");
+    slotTimer = setInterval(() => {
+      const random = slotDishes[Math.floor(Math.random() * slotDishes.length)];
+      box.textContent = random;
+    }, 80);
+    document.getElementById("slot-result").innerHTML = "";
+  }
+
+  function stopSlot() {
+    if (!isSpinning) return;
+    clearInterval(slotTimer);
+    const box = document.getElementById("slot-box");
+    const chosen = box.textContent;
+    const sound = document.getElementById("ding");
+    sound.play();
+
+    document.getElementById("slot-result").innerHTML = `
+      你抽中了：「<strong>${chosen}</strong>」！<br>
+      <a href="https://www.google.com/search?q=${encodeURIComponent(chosen + ' 附近')}" class="link" target="_blank">
+        搜尋附近的「${chosen}」
+      </a>`;
+    isSpinning = false;
+  }
+</script>
+</body>
+</html>
